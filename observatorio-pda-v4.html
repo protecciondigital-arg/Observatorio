@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Observatorio — Protección Digital Argentina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#dff0f7;--bg2:#fff;--bg3:#eef7fc;--bg4:#e4f2f8;
+  --navy:#0d1f5c;--navy2:#1a2e70;--navy3:#3a4e96;
+  --t:#0d1f5c;--t2:#2c3e80;--t3:#7080aa;
+  --y:#d4f025;--y2:rgba(212,240,37,.18);
+  --bd:rgba(13,31,92,.10);--bd2:rgba(13,31,92,.18);
+  --mono:'Space Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+  --r:8px;--rl:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{font-family:var(--sans);background:var(--bg);color:var(--t);min-height:100vh}
+.shell{display:grid;grid-template-columns:212px 1fr;min-height:100vh}
+.sidebar{background:var(--bg2);border-right:1px solid var(--bd2);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{padding:0 .5rem 1.4rem}
+.brand-ey{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.brand-nm{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--navy)}
+.brand-nm span{display:inline-block;background:var(--y);padding:0 3px}
+.nav{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--r);font-size:13px;color:var(--t3);cursor:pointer;user-select:none;transition:background .1s,color .1s}
+.nav:hover{background:var(--bg3);color:var(--navy)}
+.nav.on{background:var(--y2);color:var(--navy);font-weight:500}
+.nav svg{width:14px;height:14px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sec{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);padding:.9rem .5rem .3rem}
+.chip{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--bd2);font-size:12px;color:var(--t2);background:var(--bg2);cursor:pointer;margin-bottom:2px;user-select:none;transition:all .12s}
+.chip:hover{border-color:var(--navy);color:var(--navy);background:var(--bg3)}
+.chip.on{background:var(--y);border-color:var(--y);color:var(--navy);font-weight:500}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:var(--t3);flex-shrink:0}
+.chip.on .chip-dot{background:var(--navy)}
+.sidebar-foot{margin-top:auto;background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:.75rem .875rem;font-size:11px;color:var(--t3);line-height:1.7}
+.sidebar-foot b{color:var(--t2);font-weight:600}
+.main{padding:2.25rem 2.5rem;max-width:860px}
+.view{display:none}
+.view.on{display:block}
+.hero{margin-bottom:1.75rem}
+.hero-lbl{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:.6rem}
+.hero h1{font-family:var(--mono);font-size:clamp(20px,3vw,28px);font-weight:700;line-height:1.15;color:var(--navy);margin-bottom:.4rem}
+.hero h1 em{font-style:normal;background:var(--y);padding:0 4px}
+.hero p{font-size:13px;color:var(--t3);margin-bottom:1.1rem}
+.sbox{display:flex;background:var(--bg2);border:1.5px solid var(--bd2);border-radius:var(--rl);overflow:hidden;transition:border-color .15s}
+.sbox:focus-within{border-color:var(--navy)}
+.sinput{flex:1;border:none;outline:none;padding:13px 16px;font-size:13.5px;font-family:var(--sans);background:transparent;color:var(--navy)}
+.sinput::placeholder{color:var(--t3)}
+.sbtn{background:var(--navy);color:var(--y);border:none;padding:0 20px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.04em;cursor:pointer;white-space:nowrap;transition:background .1s}
+.sbtn:hover{background:var(--navy2)}
+.frow{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem}
+.fp{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;border:1px solid var(--bd2);font-size:11.5px;background:var(--bg2);cursor:pointer;color:var(--t2);white-space:nowrap;user-select:none;transition:all .1s}
+.fp:hover{border-color:var(--navy);color:var(--navy)}
+.fp.on{background:var(--y);border-color:var(--y);color:var(--navy);font-weight:500}
+.fp select{border:none;outline:none;background:transparent;font-size:11.5px;color:inherit;cursor:pointer;font-family:var(--sans)}
+.fp select option{background:var(--bg2);color:var(--navy)}
+.aib{background:var(--bg2);border-left:3px solid var(--navy);border-radius:0 var(--r) var(--r) 0;padding:.875rem 1.1rem;margin-bottom:1.1rem}
+.aib-lbl{font-family:var(--mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:4px}
+.aib-txt{font-size:13px;line-height:1.65;color:var(--t2)}
+.rhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem;flex-wrap:wrap;gap:8px}
+.rcnt{font-family:var(--mono);font-size:11.5px;color:var(--t3)}
+.rcnt b{color:var(--navy)}
+.rsort{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--t3)}
+.rsort select{appearance:none;background:var(--bg2);border:1px solid var(--bd2);border-radius:var(--r);padding:4px 26px 4px 9px;font-size:11.5px;font-family:var(--sans);color:var(--t2);cursor:pointer}
+.rlist{display:flex;flex-direction:column;gap:9px}
+.card{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--rl);padding:1rem 1.2rem;cursor:pointer;transition:border-color .12s,box-shadow .12s}
+.card:hover{border-color:var(--navy);box-shadow:0 3px 16px rgba(13,31,92,.08)}
+.ct{display:flex;align-items:flex-start;gap:9px;margin-bottom:.5rem}
+.cexp{font-family:var(--mono);font-size:10px;color:var(--navy3);white-space:nowrap;padding-top:2px}
+.ctitle{font-size:13.5px;font-weight:600;line-height:1.3;flex:1;color:var(--navy)}
+.ccam{font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;letter-spacing:.04em;text-transform:uppercase}
+.cd{background:var(--y2);color:var(--navy);border:1px solid rgba(212,240,37,.4)}
+.cs{background:var(--bg3);color:var(--navy3);border:1px solid var(--bd2)}
+.cmeta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.5rem}
+.tag{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--bg3);color:var(--t3);border:1px solid var(--bd)}
+.tag.yr{font-family:var(--mono);font-weight:700;background:var(--y);color:var(--navy);border-color:transparent}
+.tag.eje{background:var(--bg4);color:var(--navy3);border-color:transparent}
+.cres{font-size:12.5px;color:var(--t2);line-height:1.6;margin-bottom:.7rem}
+.cbot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.cvars{display:flex;gap:5px;flex-wrap:wrap}
+.vb{font-size:10px;padding:2px 8px;border-radius:20px}
+.vsi{background:var(--y2);color:var(--navy);font-weight:500;border:1px solid rgba(212,240,37,.4)}
+.vno{background:var(--bg3);color:var(--t3);border:1px solid var(--bd)}
+.cest{font-size:10px;padding:2px 9px;border-radius:20px;background:var(--bg3);color:var(--t3);border:1px solid var(--bd)}
+.pag{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:1.4rem}
+.pbtn{min-width:34px;height:34px;padding:0 10px;border-radius:var(--r);border:1.5px solid var(--bd2);font-family:var(--mono);font-size:12px;background:var(--bg2);color:var(--t2);cursor:pointer;transition:all .1s}
+.pbtn:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+.pbtn.on{background:var(--navy);border-color:var(--navy);color:var(--y);font-weight:700}
+.pbtn:disabled{opacity:.3;cursor:default}
+.dback{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;color:var(--t3);cursor:pointer;margin-bottom:1.4rem;transition:color .1s}
+.dback:hover{color:var(--navy)}
+.dexp{font-family:var(--mono);font-size:11px;color:var(--navy3);margin-bottom:.4rem;letter-spacing:.04em}
+.dtitle{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1.2;color:var(--navy);margin-bottom:1.4rem;max-width:680px}
+.dgrid{display:grid;grid-template-columns:1fr 256px;gap:1.1rem}
+.dside{display:flex;flex-direction:column;gap:9px}
+.dsec{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--rl);padding:.9rem 1rem}
+.dsec h3{font-family:var(--mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:.6rem}
+.dsec p{font-size:13px;line-height:1.7;color:var(--t2)}
+.vtbl{width:100%;font-size:12px;border-collapse:collapse}
+.vtbl td{padding:4px 0;vertical-align:middle}
+.vtbl td:first-child{color:var(--t3);font-size:11px;padding-right:8px}
+.vtbl td:last-child{text-align:right}
+.sitio-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:var(--r);background:var(--navy);color:var(--y);font-family:var(--mono);font-size:11.5px;font-weight:700;text-decoration:none;width:100%;transition:background .1s}
+.sitio-btn:hover{background:var(--navy2)}
+.sitio-btn svg{flex-shrink:0}
+.dh{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--navy);margin-bottom:1.5rem}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:8px;margin-bottom:2rem}
+.scard{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--rl);padding:.9rem 1rem}
+.slbl{font-size:10.5px;color:var(--t3);margin-bottom:3px}
+.snum{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--navy)}
+.snum.y{display:inline-block;background:var(--y);padding:0 4px}
+.bsec{margin-bottom:1.75rem}
+.btitle{font-family:var(--mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:.875rem}
+.brow{display:flex;align-items:center;gap:9px;margin-bottom:8px;cursor:pointer}
+.brow:hover .blbl{color:var(--navy)}
+.blbl{font-size:12.5px;color:var(--t2);width:175px;flex-shrink:0;transition:color .1s}
+.btrack{flex:1;background:var(--bd2);border-radius:3px;height:6px;overflow:hidden}
+.bfill{height:100%;border-radius:3px;background:var(--navy)}
+.bnum{font-family:var(--mono);font-size:11px;color:var(--t3);width:16px;text-align:right}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:8px}
+.vcard{background:var(--bg2);border:1.5px solid var(--bd);border-radius:var(--rl);padding:.9rem;cursor:pointer;transition:border-color .12s}
+.vcard:hover{border-color:var(--navy)}
+.vcard .slbl{margin-bottom:4px}
+.vnum{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--navy)}
+.vbar{background:var(--bd2);border-radius:3px;height:5px;overflow:hidden;margin:5px 0 4px}
+.vbar div{height:100%;border-radius:3px;background:var(--y)}
+.vpct{font-family:var(--mono);font-size:10px;color:var(--t3)}
+.empty{text-align:center;padding:3rem 1rem;color:var(--t3)}
+.empty strong{display:block;font-family:var(--mono);font-size:14px;color:var(--t2);margin-bottom:5px}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<nav class="sidebar">
+  <div class="brand">
+    <div class="brand-ey">Protección Digital Argentina</div>
+    <div class="brand-nm"><span>Observatorio</span></div>
+  </div>
+  <div class="nav on" onclick="go('search')">
+    <svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg>
+    Buscador
+  </div>
+  <div class="nav" onclick="go('dash')">
+    <svg viewBox="0 0 16 16"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+    Datos
+  </div>
+  <div class="sec">Accesos rápidos</div>
+  <div class="chip" data-k="ver" onclick="toggleChip(this)"><div class="chip-dot"></div>Verificación de edad</div>
+  <div class="chip" data-k="alg" onclick="toggleChip(this)"><div class="chip-dot"></div>Control de algoritmos</div>
+  <div class="chip" data-k="dis" onclick="toggleChip(this)"><div class="chip-dot"></div>Código de diseño</div>
+  <div class="chip" data-k="eva" onclick="toggleChip(this)"><div class="chip-dot"></div>Evaluación de impacto</div>
+  <div class="sidebar-foot"><b>30</b> proyectos cargados<br>BCN Dossier N°326<br>Actualizado: dic. 2025</div>
+</nav>
+
+<main class="main">
+  <div class="view on" id="v-search">
+    <div class="hero">
+      <div class="hero-lbl">Observatorio legislativo · Argentina</div>
+      <h1>Legislación argentina<br><em>entornos digitales</em></h1>
+      <p>Buscá proyectos de ley sobre niñez, plataformas, datos e internet.</p>
+      <div class="sbox">
+        <input class="sinput" id="qi" placeholder='ej. "grooming", "verificación de edad", "deepfakes"…' onkeydown="if(event.key==='Enter')sr()">
+        <button class="sbtn" onclick="sr()">BUSCAR →</button>
+      </div>
+    </div>
+    <div class="frow">
+      <span class="fp" data-k="cam" data-v="Diputados" onclick="tf(this)">Diputados</span>
+      <span class="fp" data-k="cam" data-v="Senado" onclick="tf(this)">Senado</span>
+      <span class="fp" data-k="ano" data-v="2025" onclick="tf(this)">2025</span>
+      <span class="fp" data-k="ano" data-v="2024" onclick="tf(this)">2024</span>
+      <span class="fp" data-k="ano" data-v="2023" onclick="tf(this)">2023</span>
+      <span class="fp" data-k="ver" data-v="1" onclick="tf(this)">&#x2713; Verif. edad</span>
+      <span class="fp" data-k="alg" data-v="1" onclick="tf(this)">&#x2713; Ctrl. algoritmos</span>
+      <span class="fp" data-k="dis" data-v="1" onclick="tf(this)">&#x2713; Código de diseño</span>
+      <span class="fp" data-k="per" data-v="1" onclick="tf(this)">&#x2713; Anti-perfilamiento</span>
+      <span class="fp" data-k="eva" data-v="1" onclick="tf(this)">&#x2713; Eval. impacto</span>
+      <span class="fp" id="fp-eje">
+        <select id="se" onchange="ea(this)">
+          <option value="">Eje temático…</option>
+          <option value="PROTECCION_INTEGRAL_DIGITAL">Protección integral</option>
+          <option value="DELITOS_DIGITALES">Delitos digitales</option>
+          <option value="EDUCACION_DIGITAL">Educación digital</option>
+          <option value="REGULACION_PLATAFORMAS">Regulación plataformas</option>
+          <option value="SALUD_MENTAL">Salud mental</option>
+          <option value="PRIVACIDAD_DATOS">Privacidad / datos</option>
+          <option value="VIOLENCIA_DIGITAL">Violencia digital</option>
+        </select>
+      </span>
+    </div>
+    <div id="ai" style="display:none"></div>
+    <div class="rhead">
+      <span class="rcnt" id="rc"><b>30</b> proyectos</span>
+      <span class="rsort">Ordenar:
+        <select onchange="sortBy(this.value)">
+          <option value="ano">Año (reciente)</option>
+          <option value="exp">Expediente</option>
+          <option value="cam">Cámara</option>
+        </select>
+      </span>
+    </div>
+    <div class="rlist" id="rl"></div>
+    <div class="pag" id="pg"></div>
+  </div>
+
+  <div class="view" id="v-detail">
+    <div class="dback" onclick="go('search')">&#x2190; Volver</div>
+    <div id="dc"></div>
+  </div>
+
+  <div class="view" id="v-dash">
+    <div class="dh">Datos del Observatorio</div>
+    <div class="sgrid" id="sg"></div>
+    <div class="bsec"><div class="btitle">Proyectos por eje temático</div><div id="bc"></div></div>
+    <div class="bsec"><div class="btitle">Cobertura de variables regulatorias</div><div class="vgrid" id="vc"></div></div>
+  </div>
+</main>
+</div>
+
+<script>
+var P=[
+{e:"4691-D-2025",c:"Diputados",a:2025,t:"Protección Digital de NNyA — Régimen integral",au:["Mónica Macha","Gabriela Estévez","Carlos Castagneto","Claudia Bernazza","Itaí Hagman"],es:"En comisión",co:["Comunicaciones e Informáticas","Presupuesto y Hacienda"],ej:"PROTECCION_INTEGRAL_DIGITAL",tg:["niñez","protección digital","plataformas","control parental"],r:"Propone un régimen integral de protección digital para NNyA con obligaciones para plataformas, control parental obligatorio, verificación de edad técnicamente robusta y sanciones para empresas incumplidoras.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2025/PDF2025/TP2025/4691-D-2025.pdf",nin:1,ver:1,alg:1,dis:1,per:1,eva:1},
+{e:"4876-D-2025",c:"Diputados",a:2025,t:"CCyCN art. 1770 — Rectificación datos falsos en redes",au:["Oscar Agost Carreño"],es:"En comisión",co:["Legislación General","Comunicaciones e Informática"],ej:"PRIVACIDAD_DATOS",tg:["datos personales","niñez","rectificación"],r:"Modifica el Código Civil para reconocer el derecho a rectificar datos falsos en redes sociales, con protección reforzada para menores.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2025/PDF2025/TP2025/4876-D-2025.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"4299-D-2025",c:"Diputados",a:2025,t:"Ley Ema — Prevención violencia digital en escuelas",au:["María Civit","Luisa Maure","Laura Rodríguez Machado","y otros"],es:"En comisión",co:["Educación","Familia, Niñez y Juventudes","Comunicaciones e Informáticas"],ej:"VIOLENCIA_DIGITAL",tg:["niñez","educación","violencia digital","ciberacoso"],r:"Crea el Programa Nacional de Prevención y Abordaje de la Violencia Digital en Ámbitos Educativos con protocolos, lineamientos docentes y contenidos curriculares.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2025/PDF2025/TP2025/4299-D-2025.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0489-D-2025",c:"Diputados",a:2025,t:"CP art. 131 — Modificación tipo penal grooming",au:["María Sotolano"],es:"En comisión",co:["Legislación Penal"],ej:"DELITOS_DIGITALES",tg:["niñez","grooming","código penal","metaverso"],r:"Amplía el art. 131 CP para incluir videojuegos online, apps de mensajería y metaversos como espacios donde puede configurarse el grooming.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2025/PDF2025/TP2025/0489-D-2025.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"5379-D-2024",c:"Diputados",a:2024,t:"Entornos Digitales Seguros para las Infancias y Adolescencias",au:["Gisela Marziotta","Mónica Macha","Itaí Hagman","Marcelo Casaretto","y otros"],es:"En comisión",co:["Familia, Niñez y Juventudes","Comunicaciones e Informáticas","Salud"],ej:"PROTECCION_INTEGRAL_DIGITAL",tg:["niñez","entornos digitales","diseño seguro","control parental"],r:"El más comprehensivo del período. Establece diseño seguro por defecto, reconoce a NNyA como consumidores vulnerables y modifica la Ley Mica Ortega.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/5379-D-2024.pdf",nin:1,ver:1,alg:1,dis:1,per:1,eva:1},
+{e:"1689-D-2024",c:"Diputados",a:2024,t:"Estrategia Nacional Prevención Acoso Escolar y Ciberacoso",au:["Martín Maquieyra","Sofía Brambilla","María Eugenia Vidal","M. F. De Sensi","y 16 más"],es:"En comisión",co:["Educación","Familia, Niñez y Juventudes","Comunicaciones e Informáticas"],ej:"VIOLENCIA_DIGITAL",tg:["niñez","ciberacoso","bullying","educación"],r:"Crea una estrategia interministerial con protocolos, capacitación docente y campañas para prevenir el ciberacoso contra NNyA.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/1689-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"2884-D-2024",c:"Diputados",a:2024,t:"NNyA — Apuestas Online y Ludopatía Digital",au:["Gabriela Brouwer de Koning","Pablo Prieto","Jorge Vara","y otros"],es:"En comisión",co:["Familia, Niñez y Juventudes","Salud","Legislación General"],ej:"SALUD_MENTAL",tg:["niñez","ludopatía","apuestas online","salud mental"],r:"Prohíbe publicidad de apuestas online dirigida a NNyA y el uso de influencers infantiles para promoverlas. Define la ludopatía digital como trastorno conductual.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/2884-D-2024.pdf",nin:1,ver:1,alg:0,dis:0,per:0,eva:0},
+{e:"0065-D-2024",c:"Diputados",a:2024,t:"CCyCN art. 638 — Sharenting y responsabilidad parental digital",au:["Lorena Matzen","Lidia Inés Ascarate","y otros"],es:"En comisión",co:["Familia, Niñez y Juventudes","Legislación General"],ej:"PRIVACIDAD_DATOS",tg:["niñez","sharenting","privacidad","datos personales"],r:"Modifica el Código Civil para que los progenitores respeten la privacidad digital de sus hijos, regulando la publicación de imágenes sin consentimiento.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/0065-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"6319-D-2024",c:"Diputados",a:2024,t:"CP — Suplantación de identidad digital",au:["Macha","Sand","Ianni","Aguirre","Osuna"],es:"En comisión",co:["Legislación Penal","Comunicaciones e Informáticas"],ej:"DELITOS_DIGITALES",tg:["niñez","suplantación identidad","código penal"],r:"Tipifica la suplantación de identidad digital con agravantes cuando la víctima sea menor de edad o la conducta se realice con fines de grooming.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/6319-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"6318-D-2024",c:"Diputados",a:2024,t:"CP — Hostigamiento digital",au:["Macha","Sand","Ianni","Aguirre","Osuna"],es:"En comisión",co:["Legislación Penal","Comunicaciones e Informáticas"],ej:"DELITOS_DIGITALES",tg:["niñez","hostigamiento","ciberacoso"],r:"Tipifica el hostigamiento digital como delito autónomo con agravantes para víctimas NNyA.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/6318-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0447-D-2024",c:"Diputados",a:2024,t:"CP — Pornovenganza, sextorsión y deepfakes",au:["Mara Brawer","Graciela Camaño","Gabriela Brouwer de Koning","y otros"],es:"En comisión",co:["Legislación Penal"],ej:"DELITOS_DIGITALES",tg:["niñez","deepfakes","sextorsión","IA"],r:"Incorpora al CP los delitos de pornovenganza, sextorsión y deepfakes pornográficos con agravantes para víctimas menores.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/0447-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"7268-D-2024",c:"Diputados",a:2024,t:"Regulación de influencers en plataformas digitales",au:["Pamela Calletti"],es:"En comisión",co:["Comunicaciones e Informáticas","Defensa del Consumidor"],ej:"REGULACION_PLATAFORMAS",tg:["niñez","influencers","trabajo infantil","publicidad"],r:"Regula influencers con alcance en contenidos dirigidos a NNyA. Aborda la explotación de niños influencers y responsabilidades de plataformas.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/7268-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"6120-D-2024",c:"Diputados",a:2024,t:"Verificación de identidad digital en redes masivas",au:["Gisela Marziotta"],es:"En comisión",co:["Comunicaciones e Informáticas","Legislación General"],ej:"REGULACION_PLATAFORMAS",tg:["niñez","verificación edad","identidad digital"],r:"Obliga a plataformas con más de 500.000 usuarios a verificar identidad digital, reduciendo el anonimato que facilita el grooming.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/6120-D-2024.pdf",nin:1,ver:1,alg:0,dis:0,per:1,eva:0},
+{e:"3720-D-2024",c:"Diputados",a:2024,t:"CP — Capítulo VII sobre identidad digital",au:["Danya Tavela"],es:"En comisión",co:["Comunicaciones e Informáticas","Legislación Penal"],ej:"DELITOS_DIGITALES",tg:["niñez","identidad digital","código penal"],r:"Crea un capítulo sobre delitos contra la identidad digital con protección reforzada para NNyA frente a perfiles falsos.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/3720-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"2997-D-2024",c:"Diputados",a:2024,t:"CP — Usurpación de identidad y hostigamiento digital",au:["María Eugenia Vidal","Cristian Adrián Ritondo","y otros"],es:"En comisión",co:["Legislación Penal"],ej:"DELITOS_DIGITALES",tg:["niñez","usurpación","hostigamiento"],r:"Tipifica usurpación de identidad y hostigamiento digital con hasta 3 años de prisión y agravantes para conductas dirigidas a NNyA.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/2997-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"1225-D-2024",c:"Diputados",a:2024,t:"Regulación publicidad por influencers en redes",au:["Micaela Morán"],es:"En comisión",co:["Comunicaciones e Informáticas","Defensa del Consumidor"],ej:"REGULACION_PLATAFORMAS",tg:["niñez","publicidad","influencers"],r:"Regula publicidad de influencers con obligaciones de transparencia y restricciones para contenidos accesibles a NNyA.",l:"https://www4.hcdn.gob.ar/dependencias/dsecretaria/Periodo2024/PDF2024/TP2024/1225-D-2024.pdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"1566-S-2025",c:"Senado",a:2025,t:"Ley de Erradicación de la Violencia en la Infancia y Adolescencia",au:["Eduardo Vischi"],es:"En comisión",co:["Legislación General","Población y Desarrollo Humano"],ej:"VIOLENCIA_DIGITAL",tg:["niñez","violencia digital","ciberacoso","grooming"],r:"Proyecto amplio sobre todas las formas de violencia contra NNyA, incluyendo capítulos sobre violencia digital, ciberacoso y grooming.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/486226/downloadPdf",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0923-S-2025",c:"Senado",a:2025,t:"CP art. 139 ter — Suplantación digital de identidad",au:["Carmen Lucila Crexell"],es:"En comisión",co:["Justicia y Asuntos Penales","Sistemas, Medios de Comunicación"],ej:"DELITOS_DIGITALES",tg:["niñez","suplantación","grooming"],r:"Incorpora al CP el art. 139 ter tipificando la suplantación digital con agravantes para víctimas menores.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/0923/2025",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0604-S-2025",c:"Senado",a:2025,t:"Educación Inteligente — IA en el sistema educativo",au:["María Victoria Huala","Andrea Marcela Cristina","Luis Alfredo Juez"],es:"En comisión",co:["Educación y Cultura","Legislación General"],ej:"EDUCACION_DIGITAL",tg:["niñez","educación","IA","ciudadanía digital"],r:"Incorpora IA y entornos digitales al sistema educativo con énfasis en uso seguro por NNyA y formación docente.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/0604/2025",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0528-S-2025",c:"Senado",a:2025,t:"Protocolos de prevención de violencia contra NNyA",au:["Andrea Marcela Cristina","Beatriz Luisa Ávila"],es:"En comisión",co:["Legislación General","Población y Desarrollo Humano"],ej:"PROTECCION_INTEGRAL_DIGITAL",tg:["niñez","protocolos","violencia digital"],r:"Establece protocolos nacionales para prevención y detección de violencia contra NNyA, con énfasis en violencia digital. Modifica Ley 26.061.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/0528/2025",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0047-S-2025",c:"Senado",a:2025,t:"Programa de Educación en Uso de Redes Sociales para NNyA",au:["Silvina García Larraburu"],es:"En comisión",co:["Educación y Cultura","Sistemas, Medios de Comunicación"],ej:"EDUCACION_DIGITAL",tg:["niñez","redes sociales","educación"],r:"Crea un programa para enseñar a NNyA el uso responsable, seguro y crítico de redes sociales.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/0047/2025",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"2213-S-2024",c:"Senado",a:2024,t:"Regulación de redes sociales y plataformas para NNyA",au:["Guadalupe Tagliaferri","Martín Maquieyra","Silvia Lospennato"],es:"En comisión",co:["Sistemas, Medios de Comunicación","Legislación General"],ej:"REGULACION_PLATAFORMAS",tg:["niñez","redes sociales","plataformas","verificación edad"],r:"Establece obligaciones para plataformas: edad mínima, controles parentales, restricciones algorítmicas y responsabilidades empresariales.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/2213/2024",nin:1,ver:1,alg:1,dis:1,per:1,eva:1},
+{e:"2197-S-2024",c:"Senado",a:2024,t:"Regulación publicidad digital en redes sociales",au:["Ezequiel Atauche"],es:"En comisión",co:["Sistemas, Medios de Comunicación","Derechos y Garantías"],ej:"REGULACION_PLATAFORMAS",tg:["niñez","publicidad","perfilamiento"],r:"Regula publicidad digital en redes. Prohíbe el perfilamiento publicitario de menores.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/2197/2024",nin:1,ver:0,alg:0,dis:0,per:1,eva:0},
+{e:"2042-S-2024",c:"Senado",a:2024,t:"Programa de Orientación y Acompañamiento para Familias de NNyA",au:["María Eugenia Dure"],es:"En comisión",co:["Salud","Legislación General"],ej:"SALUD_MENTAL",tg:["niñez","familias","salud mental","riesgos digitales"],r:"Crea un programa de orientación a familias sobre riesgos digitales: uso problemático de pantallas, ludopatía y detección de grooming.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/2042/2024",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"1845-S-2024",c:"Senado",a:2024,t:"Educación Tecnológica Integral para Educación Secundaria",au:["Eduardo Vischi"],es:"En comisión",co:["Educación y Cultura","Presupuesto y Hacienda"],ej:"EDUCACION_DIGITAL",tg:["niñez","educación","tecnología","secundaria"],r:"Establece educación tecnológica integral como materia obligatoria en la educación secundaria.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/1845/2024",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"1370-S-2024",c:"Senado",a:2024,t:"Regular la aplicación de IA en la educación",au:["Beatriz Luisa Ávila"],es:"En comisión",co:["Legislación General","Ciencia y Tecnología","Educación y Cultura"],ej:"EDUCACION_DIGITAL",tg:["niñez","IA","educación","algoritmos"],r:"Regula el uso de IA en educación: protección de datos de NNyA, transparencia algorítmica y prohibición de perfilamiento de estudiantes.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/1370/2024",nin:1,ver:0,alg:1,dis:0,per:1,eva:1},
+{e:"1034-S-2024",c:"Senado",a:2024,t:"Régimen legal para influencers en redes sociales",au:["Sergio Napoleón Leavy","María Eugenia Dure"],es:"En comisión",co:["Legislación General","Sistemas, Medios de Comunicación"],ej:"REGULACION_PLATAFORMAS",tg:["niñez","influencers","trabajo infantil"],r:"Regula influencers con capítulo sobre NNyA como creadores de contenido digital y sus derechos laborales.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/1034/2024",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0706-S-2024",c:"Senado",a:2024,t:"CP — Adecuación normas penales sobre grooming",au:["Carmen Lucila Crexell"],es:"En comisión",co:["Justicia y Asuntos Penales"],ej:"DELITOS_DIGITALES",tg:["niñez","grooming","código penal","metaverso"],r:"Actualiza el art. 131 CP para incluir videojuegos online, metaversos y apps de IA.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/0706/2024",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"0629-S-2024",c:"Senado",a:2024,t:"Prevención Ludopatía Digital en Escuelas",au:["María Eugenia Dure"],es:"En comisión",co:["Salud","Legislación General"],ej:"SALUD_MENTAL",tg:["niñez","ludopatía","educación","juegos online"],r:"Crea un programa de prevención de la ludopatía digital en escuelas con detección temprana en NNyA.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/0629/2024",nin:1,ver:0,alg:0,dis:0,per:0,eva:0},
+{e:"1682-S-2023",c:"Senado",a:2023,t:"Prevención y Erradicación de la Adicción a Dispositivos Móviles en Menores",au:["Roberto Gustavo Basualdo"],es:"En comisión",co:["Salud"],ej:"SALUD_MENTAL",tg:["niñez","adicción","dispositivos móviles","salud mental"],r:"Crea un programa nacional para abordar la adicción a dispositivos móviles en NNyA con diagnóstico, tratamiento y capacitación.",l:"https://www.senado.gob.ar/parlamentario/parlamentaria/busqueda/proyectoXNumeroYAnio/1682/2023",nin:1,ver:0,alg:0,dis:0,per:0,eva:0}
+];
+
+var EL={PROTECCION_INTEGRAL_DIGITAL:"Protección integral",DELITOS_DIGITALES:"Delitos digitales",EDUCACION_DIGITAL:"Educación digital",REGULACION_PLATAFORMAS:"Regulación plataformas",SALUD_MENTAL:"Salud mental",PRIVACIDAD_DATOS:"Privacidad / datos",VIOLENCIA_DIGITAL:"Violencia digital"};
+var VL=[{k:"nin",l:"Perspectiva niñez"},{k:"ver",l:"Verif. edad"},{k:"alg",l:"Ctrl. algoritmos"},{k:"dis",l:"Código diseño"},{k:"per",l:"Anti-perfilamiento"},{k:"eva",l:"Eval. impacto"}];
+var PER=5,AF={},sortK="ano",filtered=P.slice(),page=1;
+
+function go(v){
+  document.querySelectorAll(".view").forEach(function(x){x.classList.remove("on");});
+  document.querySelectorAll(".nav").forEach(function(x){x.classList.remove("on");});
+  document.getElementById("v-"+v).classList.add("on");
+  if(v==="search"){document.querySelectorAll(".nav")[0].classList.add("on");render();}
+  if(v==="dash"){document.querySelectorAll(".nav")[1].classList.add("on");buildDash();}
+}
+
+function toggleChip(el){
+  var k=el.getAttribute("data-k");
+  var pill=document.querySelector(".fp[data-k='"+k+"'][data-v='1']");
+  if(el.classList.contains("on")){
+    el.classList.remove("on");delete AF[k];
+    if(pill)pill.classList.remove("on");
+  } else {
+    el.classList.add("on");AF[k]=1;
+    if(pill)pill.classList.add("on");
+  }
+  sr();
+}
+
+function sr(){
+  var q=(document.getElementById("qi").value||"").trim().toLowerCase();
+  filtered=P.filter(function(p){
+    if(AF.cam&&p.c!==AF.cam)return false;
+    if(AF.ano&&p.a!==AF.ano)return false;
+    if(AF.ej&&p.ej!==AF.ej)return false;
+    if(AF.ver&&!p.ver)return false;
+    if(AF.alg&&!p.alg)return false;
+    if(AF.dis&&!p.dis)return false;
+    if(AF.per&&!p.per)return false;
+    if(AF.eva&&!p.eva)return false;
+    if(AF.nin&&!p.nin)return false;
+    if(!q)return true;
+    return p.t.toLowerCase().indexOf(q)>=0||p.e.toLowerCase().indexOf(q)>=0||p.tg.some(function(t){return t.indexOf(q)>=0;})||p.r.toLowerCase().indexOf(q)>=0||p.au.some(function(a){return a.toLowerCase().indexOf(q)>=0;});
+  });
+  filtered.sort(function(a,b){if(sortK==="ano")return b.a-a.a;if(sortK==="exp")return a.e.localeCompare(b.e);return a.c.localeCompare(b.c);});
+  page=1;
+  document.getElementById("rc").innerHTML="<b>"+filtered.length+"</b> proyecto"+(filtered.length!==1?"s":"")+(q?" &middot; \""+q+"\"":"");
+  var ai=document.getElementById("ai");
+  if(q&&filtered.length){
+    var top=filtered.slice(0,3).map(function(p){return "<strong>"+p.e+"</strong>";}).join(", ");
+    ai.style.display="block";
+    ai.innerHTML="<div class='aib'><div class='aib-lbl'>Resultados</div><div class='aib-txt'>Se encontraron <b>"+filtered.length+"</b> proyectos para \""+q+"\". Más relevantes: "+top+".</div></div>";
+  } else {ai.style.display="none";}
+  render();
+}
+
+function sortBy(v){sortK=v;sr();}
+
+function tf(el){
+  var k=el.getAttribute("data-k"),v=el.getAttribute("data-v");
+  if(el.classList.contains("on")){
+    el.classList.remove("on");delete AF[k];
+    var ch=document.querySelector(".chip[data-k='"+k+"']");
+    if(ch)ch.classList.remove("on");
+  } else {
+    if(k==="cam"||k==="ano")document.querySelectorAll(".fp[data-k='"+k+"']").forEach(function(p){p.classList.remove("on");});
+    el.classList.add("on");
+    AF[k]=(k==="ano")?parseInt(v):(k==="ver"||k==="alg"||k==="dis"||k==="per"||k==="eva"||k==="nin")?parseInt(v):v;
+    var ch=document.querySelector(".chip[data-k='"+k+"']");
+    if(ch)ch.classList.add("on");
+  }
+  sr();
+}
+
+function ea(sel){if(sel.value)AF["ej"]=sel.value;else delete AF["ej"];sr();}
+
+function render(){
+  var el=document.getElementById("rl"),pg=document.getElementById("pg");
+  if(!filtered.length){el.innerHTML="<div class='empty'><strong>Sin resultados</strong>Probá con otros términos o quitá algún filtro.</div>";pg.innerHTML="";return;}
+  var pages=Math.ceil(filtered.length/PER),slice=filtered.slice((page-1)*PER,page*PER),html="";
+  for(var i=0;i<slice.length;i++){
+    var p=slice[i],vbs="";
+    for(var j=1;j<VL.length;j++){var v=VL[j];vbs+="<span class='vb "+(p[v.k]?"vsi":"vno")+"'>"+(p[v.k]?"&#x2713; ":"&#x2013; ")+v.l+"</span>";}
+    var tags="<span class='tag yr'>"+p.a+"</span><span class='tag eje'>"+(EL[p.ej]||p.ej)+"</span>";
+    for(var k=0;k<Math.min(2,p.tg.length);k++)tags+="<span class='tag'>"+p.tg[k]+"</span>";
+    html+="<div class='card' onclick=\"detail('"+p.e+"')\"><div class='ct'><span class='cexp'>"+p.e+"</span><span class='ctitle'>"+p.t+"</span><span class='ccam "+(p.c==="Diputados"?"cd":"cs")+"'>"+p.c+"</span></div><div class='cmeta'>"+tags+"</div><div class='cres'>"+p.r+"</div><div class='cbot'><div class='cvars'>"+vbs+"</div><span class='cest'>"+p.es+"</span></div></div>";
+  }
+  el.innerHTML=html;
+  if(pages<=1){pg.innerHTML="";return;}
+  var btns="<button class='pbtn' onclick='setPage("+(page-1)+")' "+(page===1?"disabled":"")+">&#x2190;</button>";
+  for(var n=1;n<=pages;n++)btns+="<button class='pbtn"+(n===page?" on":"")+"' onclick='setPage("+n+")'>"+n+"</button>";
+  btns+="<button class='pbtn' onclick='setPage("+(page+1)+")' "+(page===pages?"disabled":"")+">&#x2192;</button>";
+  pg.innerHTML=btns;
+}
+
+function setPage(n){if(n<1||n>Math.ceil(filtered.length/PER))return;page=n;render();document.getElementById("rl").scrollIntoView({behavior:"smooth",block:"start"});}
+
+function detail(exp){
+  var p=null;
+  for(var i=0;i<P.length;i++){if(P[i].e===exp){p=P[i];break;}}
+  if(!p)return;
+  go("detail");
+  var rows="",coms="",tgs="";
+  for(var i=0;i<VL.length;i++){var v=VL[i],lbl=v.l==="Perspectiva niñez"?"Perspectiva niñez y adolescencia":v.l;rows+="<tr><td>"+lbl+"</td><td><span class='vb "+(p[v.k]?"vsi":"vno")+"'>"+(p[v.k]?"Sí":"No")+"</span></td></tr>";}
+  for(var i=0;i<p.co.length;i++)coms+="<span class='tag'>"+p.co[i]+"</span>";
+  for(var i=0;i<p.tg.length;i++)tgs+="<span class='tag'>"+p.tg[i]+"</span>";
+  document.getElementById("dc").innerHTML=
+    "<div class='dexp'>"+p.e+" &middot; "+p.c+" &middot; "+p.a+"</div>"+
+    "<div class='dtitle'>"+p.t+"</div>"+
+    "<div class='dgrid'>"+
+      "<div>"+
+        "<div class='dsec' style='margin-bottom:10px'><h3>Resumen</h3><p>"+p.r+"</p></div>"+
+        "<div class='dsec' style='margin-bottom:10px'><h3>Comisiones</h3><div style='display:flex;flex-wrap:wrap;gap:5px;margin-top:4px'>"+coms+"</div></div>"+
+        "<div class='dsec'><h3>Autores</h3><p>"+p.au.join(", ")+"</p></div>"+
+      "</div>"+
+      "<div class='dside'>"+
+        "<div class='dsec'><h3>Estado</h3><span class='cest' style='font-size:11px'>"+p.es+"</span></div>"+
+        "<div class='dsec'><h3>Eje temático</h3><span class='tag eje'>"+(EL[p.ej]||p.ej)+"</span></div>"+
+        "<div class='dsec'><h3>Variables regulatorias</h3><table class='vtbl'>"+rows+"</table></div>"+
+        "<div class='dsec'><h3>Tags</h3><div style='display:flex;flex-wrap:wrap;gap:4px;margin-top:2px'>"+tgs+"</div></div>"+
+        "<button class='sitio-btn' onclick=\"window.open('"+p.l+"','_blank','width=900,height=700,scrollbars=yes,resizable=yes')\">"+"<svg width='13' height='13' viewBox='0 0 16 16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><rect x='3' y='1' width='10' height='14' rx='1.5'/><path d='M6 5h4M6 8h4M6 11h2'/></svg>"+"Ver texto del proyecto"+"</button>"+
+      "</div>"+
+    "</div>";
+}
+
+function buildDash(){
+  var n=P.length;
+  function cnt(k){return P.filter(function(p){return p[k];}).length;}
+  var stats=[["Total",n,true],["Diputados",P.filter(function(p){return p.c==="Diputados";}).length,false],["Senado",P.filter(function(p){return p.c==="Senado";}).length,false],["Verif. edad",cnt("ver"),false],["Ctrl. algoritmos",cnt("alg"),false],["Código diseño",cnt("dis"),false],["Anti-perfilamiento",cnt("per"),false],["Eval. impacto",cnt("eva"),false]];
+  var sg="";for(var i=0;i<stats.length;i++)sg+="<div class='scard'><div class='slbl'>"+stats[i][0]+"</div><div class='snum"+(stats[i][2]?" y":"")+"'>"+stats[i][1]+"</div></div>";
+  document.getElementById("sg").innerHTML=sg;
+  var ec={};P.forEach(function(p){ec[p.ej]=(ec[p.ej]||0)+1;});
+  var ekeys=Object.keys(ec).sort(function(a,b){return ec[b]-ec[a];});
+  var bc="";for(var i=0;i<ekeys.length;i++){var ej=ekeys[i],c=ec[ej];bc+="<div class='brow' onclick=\"filterEje('"+ej+"')\"><div class='blbl'>"+(EL[ej]||ej)+"</div><div class='btrack'><div class='bfill' style='width:"+Math.round(c/n*100)+"%'></div></div><div class='bnum'>"+c+"</div></div>";}
+  document.getElementById("bc").innerHTML=bc;
+  var vc="";for(var i=1;i<VL.length;i++){var v=VL[i],c=cnt(v.k),pct=Math.round(c/n*100);vc+="<div class='vcard' onclick=\"filterVar('"+v.k+"')\"><div class='slbl'>"+v.l+"</div><div class='vnum'>"+c+"</div><div class='vbar'><div style='width:"+pct+"%'></div></div><div class='vpct'>"+pct+"% de proyectos</div></div>";}
+  document.getElementById("vc").innerHTML=vc;
+}
+
+function filterEje(ej){AF["ej"]=ej;document.getElementById("se").value=ej;go("search");sr();}
+function filterVar(k){var chip=document.querySelector(".chip[data-k='"+k+"']");if(chip)toggleChip(chip);else{AF[k]=1;go("search");sr();}}
+
+sr();
+</script>
+</body>
+</html>
